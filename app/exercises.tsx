@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 
-export default function CreateRoutine() {
+export default function exercises() {
     const [exercises, setExercises] = useState([
         {
             id: 1,
             muscle: 'Pecho',
             name: 'Press de Banca',
             description: 'Ejercicio para trabajar el pecho.',
-            image: 'https://via.placeholder.com/100',
+            image: 'https://www.dhzfitness.com/uploads/pectoralis-major.jpg',
         },
         {
             id: 2,
-            muscle: 'Espalda',
-            name: 'Dominadas',
-            description: 'Ejercicio para trabajar la espalda.',
-            image: 'https://via.placeholder.com/100',
+            muscle: 'Hombros',
+            name: 'Press Militar',
+            description: 'Ejercicio para trabajar hombros con barra',
+            image: 'https://media.istockphoto.com/id/533845828/es/foto/deltoris-m%C3%BAsculos-anterior-de-la-anatom%C3%ADa-m%C3%BAsculos-aislado-sobre-blanco.jpg?s=612x612&w=0&k=20&c=08Szy-9VJSciUsSk3U95EcE_QU88gw-7tqRaBwrxid0=',
         },
     ]);
 
@@ -70,12 +70,11 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     muscle: {
-        fontWeight: 'bold',
         fontSize: 14,
     },
     name: {
         fontWeight: 'bold',
-        fontSize: 16,
+        fontSize: 18,
     },
     description: {
         fontSize: 12,

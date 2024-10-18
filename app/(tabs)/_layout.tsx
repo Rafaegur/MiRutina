@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Ionicons } from '@expo/vector-icons'; // Asegúrate de importar Ionicons
+import { Ionicons } from '@expo/vector-icons'; // Asegï¿½rate de importar Ionicons
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 

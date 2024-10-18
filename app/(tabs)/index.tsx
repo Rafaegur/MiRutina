@@ -3,13 +3,17 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native'; // Importa useNavigation
 
 export default function HomeScreen() {
-    const navigation = useNavigation(); // Obt�n acceso a la navegaci�n
+    const navigation = useNavigation(); // Obtén acceso a la navegación
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Mis rutinas</Text>
 
-            <View style={styles.routineCard}>
+            {/* Aquí envuelves la tarjeta de rutina en TouchableOpacity */}
+            <TouchableOpacity 
+                style={styles.routineCard} 
+                onPress={() => navigation.navigate('exercises')} // Navega a ejercicios
+            >
                 <Image
                     source={{ uri: 'https://static.vecteezy.com/system/resources/previews/017/064/096/non_2x/weight-gym-icon-free-vector.jpg' }}
                     style={styles.image}
@@ -17,14 +21,15 @@ export default function HomeScreen() {
                 <View style={styles.textContainer}>
                     <Text style={styles.routineSubtitle}>Cuarta rutina</Text>
                     <Text style={styles.routineTitle}>Rutina Octubre-Nov</Text>
-                    <Text>Mas foco en hombros</Text>
-                    <Text>Mas foco en pecho</Text>
+                    <Text>Más foco en hombros</Text>
+                    <Text>Más foco en pecho</Text>
                 </View>
-            </View>
+            </TouchableOpacity>
 
+            {/* Botón para agregar una nueva rutina */}
             <TouchableOpacity
                 style={styles.addButton}
-                onPress={() => navigation.navigate('CreateRoutine')} // Navega a CreateRoutine
+                //onPress={() => navigation.navigate('CreateRoutine')} // Navega a CreateRoutine
             >
                 <Text style={styles.addButtonText}>+ Nueva rutina</Text>
             </TouchableOpacity>
@@ -37,11 +42,6 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 16,
         backgroundColor: 'white',
-    },
-    blackHeader: {
-        backgroundColor: 'black',
-        height: 50,
-        width: '100%',  
     },
     title: {
         fontSize: 24,
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     image: {
         width: 50,
         height: 50,
-        backgroundColor: '#D9D9D9', // Color de fondo gris claro para imitar el placeholder de imagen
+        backgroundColor: '#D9D9D9',
         marginRight: 16,
     },
     textContainer: {
@@ -90,3 +90,4 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
 });
+
