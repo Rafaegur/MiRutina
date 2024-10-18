@@ -1,7 +1,10 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native'; // Importa useNavigation
 
 export default function HomeScreen() {
+    const navigation = useNavigation(); // Obtén acceso a la navegación
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Mis rutinas</Text>
@@ -19,7 +22,10 @@ export default function HomeScreen() {
                 </View>
             </View>
 
-            <TouchableOpacity style={styles.addButton}>
+            <TouchableOpacity
+                style={styles.addButton}
+                onPress={() => navigation.navigate('CreateRoutine')} // Navega a CreateRoutine
+            >
                 <Text style={styles.addButtonText}>+ Nueva rutina</Text>
             </TouchableOpacity>
         </View>
@@ -31,6 +37,11 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 16,
         backgroundColor: 'white',
+    },
+    blackHeader: {
+        backgroundColor: 'black',
+        height: 50,
+        width: '100%',  
     },
     title: {
         fontSize: 24,

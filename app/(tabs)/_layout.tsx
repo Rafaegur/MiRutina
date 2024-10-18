@@ -5,32 +5,23 @@ import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function TabLayout() {
-    const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme();
 
-    return (
-        <Tabs
-            screenOptions={{
-                tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-                headerShown: false,
-            }}>
-            <Tabs.Screen
-                name="index"
-                options={{
-                    title: 'Home',
-                    tabBarIcon: ({ color, focused }) => (
-                        <Ionicons name={focused ? 'home' : 'home-outline'} size={24} color={color} />
-                    ),
-                }}
-            />
-            <Tabs.Screen
-                name="explore"
-                options={{
-                    title: 'Rutinas',
-                    tabBarIcon: ({ color, focused }) => (
-                        <Ionicons name={focused ? 'barbell' : 'barbell-outline'} size={24} color={color} />
-                    ),
-                }}
-            />
-        </Tabs>
-    );
+  return (
+    <Tabs
+      screenOptions={{
+        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        headerShown: false,
+      }}>
+      <Tabs.Screen
+        name="index"
+              options={{
+                  title: 'Rutinas',
+                  tabBarIcon: ({ color, focused }) => (
+                      <Ionicons name={focused ? 'barbell' : 'barbell-outline'} size={24} color={color} />
+                  ),
+              }}
+      />
+    </Tabs>
+  );
 }
