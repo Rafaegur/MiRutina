@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native'; // Importa useNavigation
 
 export default function exercises() {
+    const navigation = useNavigation(); // Obtén acceso a la navegación
     const [exercises, setExercises] = useState([
         {
             id: 1,
@@ -21,19 +23,23 @@ export default function exercises() {
 
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.title}>Crear Nueva Rutina</Text>
-
-            {exercises.map((exercise) => (
-                <View key={exercise.id} style={styles.card}>
-                    <Image source={{ uri: exercise.image }} style={styles.image} />
-                    <View style={styles.textContainer}>
-                        <Text style={styles.muscle}>{exercise.muscle}</Text>
-                        <Text style={styles.name}>{exercise.name}</Text>
-                        <Text style={styles.description}>{exercise.description}</Text>
-                    </View>
-                </View>
-            ))}
-
+            <Text style={styles.title}>Ejercicios</Text>
+            
+                {exercises.map((exercise) => (
+                    <TouchableOpacity 
+                        style={styles.routineCard} 
+                        onPress={() => navigation.navigate('series')} // Navega a ejercicios
+                    >
+                        <View key={exercise.id} style={styles.card}>
+                            <Image source={{ uri: exercise.image }} style={styles.image} />
+                            <View style={styles.textContainer}>
+                                <Text style={styles.muscle}>{exercise.muscle}</Text>
+                                <Text style={styles.name}>{exercise.name}</Text>
+                                <Text style={styles.description}>{exercise.description}</Text>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                ))}
             <TouchableOpacity style={styles.addButton}>
                 <Text style={styles.addButtonText}>+ Agregar Ejercicio</Text>
             </TouchableOpacity>
@@ -53,18 +59,20 @@ const styles = StyleSheet.create({
         marginBottom: 16,
     },
     card: {
+        backgroundColor: '#E0E0E0',
         flexDirection: 'row',
         alignItems: 'center',
         borderWidth: 1,
         borderColor: 'black',
         borderRadius: 16,
-        padding: 16,
+        padding: 10,
         marginBottom: 16,
     },
     image: {
-        width: 50,
-        height: 50,
+        width: 100,
+        height: 100,
         marginRight: 16,
+        borderRadius: 100,
     },
     textContainer: {
         flex: 1,
