@@ -3,6 +3,8 @@ import { View, Text, Image, Dimensions, ScrollView, TouchableOpacity, Alert } fr
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LineChart } from 'react-native-chart-kit';
 import styles from '../styles/seriesScreenStyles';
+import { useRoute, RouteProp } from '@react-navigation/native';
+import { RootStackParamList } from '../components/navigation/AppNavigator';
 
 type Serie = {
     id: number;
@@ -12,38 +14,58 @@ type Serie = {
     image: string;
 };
 
-export default function Series() {
+export default function SeriesScreen() {
+    const route = useRoute<RouteProp<RootStackParamList, 'seriesScreen'>>();
+    const { exerciseId, exerciseName, exerciseMuscle, exerciseImage } = route.params || {};
+
     const [series, setSeries] = useState<Serie[]>([]);
     const { width } = Dimensions.get('window');
-
-    // Estados para los valores de entrada
     const [peso, setPeso] = useState<number>(0);
     const [reps, setReps] = useState<number>(0);
     const [rir, setRIR] = useState<number>(0);
 
     // Función para guardar todos los valores de peso, reps y RIR
     const saveAllInputs = async () => {
+        if (!exerciseId) {
+            Alert.alert('Error', 'No se puede guardar sin un ID de ejercicio.');
+            return;
+        }
         try {
-            await AsyncStorage.setItem('@peso', peso.toString());
-            await AsyncStorage.setItem('@reps', reps.toString());
-            await AsyncStorage.setItem('@rir', rir.toString());
-            Alert.alert('Datos guardados', 'Los valores de peso, reps y RIR se han guardado correctamente.');
+            const newSerie: Serie = {
+                id: Math.floor(Math.random() * 1000),
+                muscle: exerciseMuscle || 'Musculo Desconocido',
+                name: exerciseName || 'Ejercicio Desconocido',
+                exercise: exerciseName || 'Ejercicio Desconocido',
+                image: exerciseImage || 'https://via.placeholder.com/100',
+            };
+
+            const updatedSeries = [...series, newSerie];
+            setSeries(updatedSeries);
+
+            await AsyncStorage.setItem(`@series_${exerciseId}`, JSON.stringify(updatedSeries));
+            await AsyncStorage.setItem(`@peso_${exerciseId}`, peso.toString());
+            await AsyncStorage.setItem(`@reps_${exerciseId}`, reps.toString());
+            await AsyncStorage.setItem(`@rir_${exerciseId}`, rir.toString());
+
+            Alert.alert('Datos guardados', 'Los valores de peso, reps, y RIR se han guardado correctamente.');
         } catch (error) {
             console.error('Error al guardar los datos de entrada:', error);
         }
     };
 
-
     // Cargar series y datos de inputs desde AsyncStorage
     const loadSeries = async () => {
+        if (!exerciseId) return;
         try {
-            const storedSeries = await AsyncStorage.getItem('@series');
+            const storedSeries = await AsyncStorage.getItem(`@series_${exerciseId}`);
             if (storedSeries) {
                 setSeries(JSON.parse(storedSeries));
             }
-            const storedPeso = await AsyncStorage.getItem('@peso');
-            const storedReps = await AsyncStorage.getItem('@reps');
-            const storedRIR = await AsyncStorage.getItem('@rir');
+
+            const storedPeso = await AsyncStorage.getItem(`@peso_${exerciseId}`);
+            const storedReps = await AsyncStorage.getItem(`@reps_${exerciseId}`);
+            const storedRIR = await AsyncStorage.getItem(`@rir_${exerciseId}`);
+
             if (storedPeso !== null) setPeso(parseInt(storedPeso, 10));
             if (storedReps !== null) setReps(parseInt(storedReps, 10));
             if (storedRIR !== null) setRIR(parseInt(storedRIR, 10));
@@ -52,15 +74,13 @@ export default function Series() {
         }
     };
 
-    // Función para guardar un valor en AsyncStorage
-    const saveValue = async (key: string, value: number) => {
-        try {
-            await AsyncStorage.setItem(key, value.toString());
-            Alert.alert('Datos guardados', `El valor de ${key.slice(1)} se ha guardado correctamente.`);
-        } catch (error) {
-            console.error(`Error al guardar ${key}:`, error);
+    useEffect(() => {
+        if (exerciseId) {
+            loadSeries();
+        } else {
+            Alert.alert('Error', 'No se recibieron los datos del ejercicio.');
         }
-    };
+    }, []);
 
     // Funciones para incrementar y decrementar los valores
     const incrementPeso = () => setPeso(prev => prev + 1);
@@ -72,14 +92,9 @@ export default function Series() {
     const incrementRIR = () => setRIR(prev => prev + 1);
     const decrementRIR = () => setRIR(prev => Math.max(0, prev - 1));
 
-    // Cargar series y datos de inputs al montar el componente
-    useEffect(() => {
-        loadSeries();
-    }, []);
-
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Press de Banca</Text>
+            <Text style={styles.title}>{exerciseName || 'Ejercicio Desconocido'}</Text>
 
             {/* Gráfico */}
             <LineChart
@@ -123,6 +138,7 @@ export default function Series() {
                 ))}
             </ScrollView>
 
+            {/* Controles de peso, reps y RIR */}
             <View style={styles.rowContainer}>
                 <View style={styles.inputWrapper}>
                     <Text>Peso</Text>
@@ -167,13 +183,6 @@ export default function Series() {
             <TouchableOpacity style={styles.saveButton} onPress={saveAllInputs}>
                 <Text style={styles.saveButtonText}>Guardar todo</Text>
             </TouchableOpacity>
-
-            {/* Botón de añadir grabación */}
-            <TouchableOpacity style={styles.addButton}>
-                <Text style={styles.addButtonText}>+ Añadir grabación</Text>
-            </TouchableOpacity>
-
         </View>
     );
 }
-

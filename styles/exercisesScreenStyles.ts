@@ -32,7 +32,7 @@ export default StyleSheet.create({
         width: 100,
         height: 100,
         marginRight: 20,
-        borderRadius: 100,
+        borderRadius: 50,
     },
     textContainer: {
         flex: 1,
@@ -40,19 +40,10 @@ export default StyleSheet.create({
     inputsContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        marginVertical: 8, // reducir margen vertical para acercar inputs a las tarjetas
+        marginVertical: 8,
     },
     inputWrapper: {
         alignItems: 'center',
-    },
-    input: {
-        borderWidth: 1,
-        borderColor: 'black',
-        borderRadius: 8,
-        width: 60,
-        textAlign: 'center',
-        height: 40,
-        marginTop: 4,
     },
     addButton: {
         marginTop: 16,
@@ -77,5 +68,68 @@ export default StyleSheet.create({
         fontSize: 12,
         color: 'gray',
     },
-});
 
+    // Estilos del modal
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        width: '90%',
+        padding: 20,
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    modalTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 15,
+        textAlign: 'center',
+    },
+    label: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        alignSelf: 'flex-start',
+        marginVertical: 4,
+    },
+    input: {
+        width: '100%',
+        borderWidth: 1,
+        borderColor: 'black',
+        borderRadius: 8,
+        padding: 8,
+        marginBottom: 10,
+        fontSize: 16,
+    },
+    placeholderImage: {
+        width: 80,
+        height: 80,
+        marginBottom: 20,
+        borderRadius: 40,
+        backgroundColor: '#E0E0E0',
+    },
+    modalButton: {
+        backgroundColor: '#4CAF50',
+        padding: 12,
+        borderRadius: 5,
+        alignItems: 'center',
+        width: '100%',
+        marginTop: 10,
+    },
+    modalButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
+    modalCloseButton: {
+        marginTop: 10,
+    },
+    modalCloseButtonText: {
+        color: '#EF4423',
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
+});

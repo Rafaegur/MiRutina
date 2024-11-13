@@ -1,37 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, TouchableOpacity, Modal, TextInput, Alert } from 'react-native';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RoutineCard from '../../components/RoutineCard';
 import styles from '../../styles/indexStyles';
+import { RootStackParamList } from '../../components/navigation/AppNavigator'; 
+
 
 interface Routine {
-    id: number;  // Agregar un 'id' único para cada rutina
+    id: number;
     imageUri: string;
     title: string;
     subtitle: string;
-    description: string[];  // Mantenemos 'string[]' para la descripción
+    description: string[];
 }
 
 export default function HomeScreen() {
     const navigation = useNavigation();
-
-    // Especificamos explícitamente el tipo de 'routines' como un arreglo de objetos 'Routine'
     const [routines, setRoutines] = useState<Routine[]>([]);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [newTitle, setNewTitle] = useState('');
+    const [newDescription, setNewDescription] = useState('');
 
-    // Función para cargar las rutinas desde AsyncStorage
     const loadRoutines = async () => {
         try {
             const storedRoutines = await AsyncStorage.getItem('@routines');
             if (storedRoutines) {
-                setRoutines(JSON.parse(storedRoutines));  // Deberíamos recibir un arreglo de 'Routine[]'
+                setRoutines(JSON.parse(storedRoutines));
             }
         } catch (error) {
             console.error('Error al cargar rutinas:', error);
         }
     };
 
-    // Función para guardar rutinas en AsyncStorage
     const saveRoutines = async (newRoutines: Routine[]) => {
         try {
             await AsyncStorage.setItem('@routines', JSON.stringify(newRoutines));
@@ -40,37 +41,38 @@ export default function HomeScreen() {
         }
     };
 
-    // Función para eliminar una rutina por su 'id'
     const deleteRoutine = async (id: number) => {
-        const updatedRoutines = routines.filter((routine) => routine.id !== id); // Filtramos la rutina por 'id'
-        setRoutines(updatedRoutines);  // Actualizamos el estado
-        saveRoutines(updatedRoutines);  // Guardamos el nuevo arreglo de rutinas en AsyncStorage
+        const updatedRoutines = routines.filter((routine) => routine.id !== id);
+        setRoutines(updatedRoutines);
+        saveRoutines(updatedRoutines);
     };
 
-    // Cargar rutinas al montar el componente
     useEffect(() => {
         loadRoutines();
     }, []);
 
-    // Función para agregar una nueva rutina
     const addRoutine = () => {
-        // Aquí especificamos explícitamente el tipo de 'newRoutine' como 'Routine'
+        if (!newTitle.trim()) {
+            Alert.alert('Error', 'El título de la rutina no puede estar vacío');
+            return;
+        }
+
         const newRoutine: Routine = {
-            id: Math.floor(Math.random() * 1000),  // Generamos un 'id' único
+            id: Math.floor(Math.random() * 1000),
             imageUri: 'https://static.vecteezy.com/system/resources/previews/017/064/096/non_2x/weight-gym-icon-free-vector.jpg',
-            title: `Rutina Nueva`,
-            subtitle: `Rutina personalizada`,
-            description: ['Ejercicio adicional', 'Series avanzadas'],  // 'description' es un arreglo de string
+            title: newTitle,
+            subtitle: 'Rutina personalizada',
+            description: [newDescription],
         };
 
-        // Aquí el tipo de 'updatedRoutines' es explícitamente 'Routine[]' (arreglo de rutinas)
-        const updatedRoutines: Routine[] = [...routines, newRoutine];
-
-        // Actualizamos el estado con 'updatedRoutines', que es un arreglo de 'Routine[]'
+        const updatedRoutines = [...routines, newRoutine];
         setRoutines(updatedRoutines);
-
-        // Guardamos las rutinas en AsyncStorage
         saveRoutines(updatedRoutines);
+
+        // Cierra el modal y reinicia los campos de entrada
+        setModalVisible(false);
+        setNewTitle('');
+        setNewDescription('');
     };
 
     return (
@@ -84,19 +86,54 @@ export default function HomeScreen() {
                         title={routine.title}
                         subtitle={routine.subtitle}
                         description={routine.description}
-                        onPress={() => navigation.navigate('exercisesScreen')}
+                        onPress={() => navigation.navigate('exercisesScreen', { routineId: routine.id })}
                     />
-                    {/* Botón para eliminar rutina */}
                     <TouchableOpacity onPress={() => deleteRoutine(routine.id)} style={styles.deleteButton}>
                         <Text style={styles.deleteButtonText}>Eliminar</Text>
                     </TouchableOpacity>
                 </View>
             ))}
 
-            {/* Botón para agregar una nueva rutina */}
-            <TouchableOpacity style={styles.addButton} onPress={addRoutine}>
+            {/* Botón para abrir el modal de nueva rutina */}
+            <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
                 <Text style={styles.addButtonText}>+ Nueva rutina</Text>
             </TouchableOpacity>
+
+            {/* Modal para crear una nueva rutina */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTitle}>Crear nueva rutina</Text>
+
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Título de la rutina"
+                            value={newTitle}
+                            onChangeText={setNewTitle}
+                        />
+
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Descripción de la rutina"
+                            value={newDescription}
+                            onChangeText={setNewDescription}
+                        />
+
+                        <TouchableOpacity style={styles.modalButton} onPress={addRoutine}>
+                            <Text style={styles.modalButtonText}>Guardar rutina</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.modalCloseButton} onPress={() => setModalVisible(false)}>
+                            <Text style={styles.modalCloseButtonText}>Cancelar</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
 }

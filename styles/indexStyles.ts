@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         borderRadius: 16,
         padding: 16,
-        marginTop: 20, // Separación de los otros elementos
+        marginTop: 20,
     },
     addButtonText: {
         fontSize: 16,
@@ -36,12 +36,70 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         paddingVertical: 8,
         paddingHorizontal: 12,
-        marginTop: 10,  // Muy poco margen superior para que esté pegado a la tarjeta
+        marginTop: 10,
     },
     deleteButtonText: {
         fontSize: 14,
         fontWeight: 'bold',
-    }
+    },
+
+    // Estilos del modal para crear nueva rutina
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        width: '80%',
+        padding: 20,
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    modalTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    input: {
+        width: '100%',
+        borderBottomWidth: 1,
+        borderColor: '#ccc',
+        padding: 8,
+        marginBottom: 15,
+        fontSize: 16,
+    },
+    modalButton: {
+        backgroundColor: '#4CAF50',
+        padding: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+        width: '100%',
+        marginTop: 10,
+    },
+    modalButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    modalCloseButton: {
+        marginTop: 10,
+    },
+    modalCloseButtonText: {
+        color: '#EF4423',
+        fontWeight: 'bold',
+    },
+    card: {
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        padding: 16,
+        marginVertical: 8,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
+    },
 });
 
 export default styles;

@@ -1,4 +1,3 @@
-// ExerciseCard.tsx
 import React from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import styles from '../styles/exerciseCardStyles';
@@ -14,15 +13,16 @@ type Exercise = {
 type ExerciseCardProps = {
     exercise: Exercise;
     onPress: () => void;
-    onDelete: () => void; // Nueva prop para eliminar
+    onDelete: () => void;
 };
 
 export default function ExerciseCard({ exercise, onPress, onDelete }: ExerciseCardProps) {
     return (
         <View style={styles.card}>
-            <TouchableOpacity onPress={onPress}>
+            <TouchableOpacity onPress={onPress} style={{ flex: 1 }}>
                 <Image source={{ uri: exercise.image }} style={styles.image} />
                 <Text style={styles.name}>{exercise.name}</Text>
+                <Text style={styles.muscle}>{exercise.muscle}</Text> 
                 <Text style={styles.description}>{exercise.description}</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={onDelete} style={styles.deleteButton}>
@@ -31,3 +31,4 @@ export default function ExerciseCard({ exercise, onPress, onDelete }: ExerciseCa
         </View>
     );
 }
+<Text style={styles.addButtonText}>+ Agregar Ejercicio</Text>

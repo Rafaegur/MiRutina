@@ -1,4 +1,3 @@
-
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -22,6 +21,11 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         marginVertical: 5,
+    },
+    muscle: {  // Nuevo estilo para el músculo
+        fontSize: 14,
+        color: '#333',
+        marginBottom: 4,
     },
     description: {
         fontSize: 14,
